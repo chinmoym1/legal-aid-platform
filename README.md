@@ -85,10 +85,10 @@ streamlit run my_app/streamlit_app.py
 
 LegiSense aims to bridge the gap between citizens and legal help by combining AI automation with expert legal knowledge, empowering individuals to get the right assistance without unnecessary hurdles.
 
-## 🤝 Contributers
+<!-- ## 🤝 Contributers
 ## 🌐 Connect with Me  and My team 
 
-## 🤝 Contributors  
+## 🤝 Contributors   -->
 
 ---
 
