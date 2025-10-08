@@ -1,4 +1,4 @@
-# ⚖️ LegiSense – AI-Powered Legal Aid Advisor  
+# ⚖️ LegalEase AI – An AI-Powered Legal Aid Advisor  
 
 ## 🚀 Tech Stack
 
@@ -37,7 +37,7 @@
 ---
 
 ## 📖 Overview  
-**LegiSense** is an **AI-powered legal assistance platform** that makes legal help more **accessible, affordable, and efficient**.  
+**LeagalEase AI** is an **AI-powered legal assistance platform** that makes legal help more **accessible, affordable, and efficient**.  
 It combines **automation, AI, and law** into a single, easy-to-use application.  
 
 ---
@@ -64,7 +64,7 @@ It combines **automation, AI, and law** into a single, easy-to-use application.
 
 ### Clone the Repository  
 ```bash
-git clone https://github.com/your-username/LegiSense.git
+git clone https://github.com/your-username/LeagalEase AI.git
 ```
 ### Set Up Virtual Environment
 ```
@@ -83,7 +83,7 @@ streamlit run my_app/streamlit_app.py
 ```
 ## 🌍 Vision
 
-LegiSense aims to bridge the gap between citizens and legal help by combining AI automation with expert legal knowledge, empowering individuals to get the right assistance without unnecessary hurdles.
+LeagalEase AI aims to bridge the gap between citizens and legal help by combining AI automation with expert legal knowledge, empowering individuals to get the right assistance without unnecessary hurdles.
 
 <!-- ## 🤝 Contributers
 ## 🌐 Connect with Me  and My team 
