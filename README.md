@@ -1,5 +1,7 @@
 # ⚖️ LegalEase AI – An AI-Powered Legal Aid Advisor  
 
+ Live : https://legalease-ai.streamlit.app/
+
 ## 🚀 Tech Stack
 
 ### 🖥️ Frontend
