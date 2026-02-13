@@ -2,3 +2,6 @@ libnss3
 libnspr4
 libgbm1
 libasound2
+libxss1
+libatk-bridge2.0-0
+libgtk-3-0
