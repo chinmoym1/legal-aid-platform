@@ -78,13 +78,14 @@ def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
         return BytesIO()
 
 def extract_text(file):
-    if file.name.endswith(".pdf"):
-        reader = PyPDF2.PdfReader(file)
-        return " ".join([page.extract_text() or "" for page in reader.pages])
-    elif file.name.endswith(".docx"):
-        return docx2txt.process(file)
-    elif file.name.endswith(".txt"):
-        return file.read().decode("utf-8")
+    try:
+        if file.name.endswith(".pdf"):
+            reader = PyPDF2.PdfReader(file)
+            return " ".join([page.extract_text() or "" for page in reader.pages])
+        elif file.name.endswith(".docx"):
+            return docx2txt.process(file)
+        elif file.name.endswith(".txt"):
+            return file.read().decode("utf-8")
     except Exception as e:
         st.error(f"Error reading file: {e}")
     return ""
