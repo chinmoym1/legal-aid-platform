@@ -65,7 +65,8 @@ def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
                     "--no-sandbox", 
                     "--disable-setuid-sandbox", 
                     "--disable-dev-shm-usage", 
-                    "--disable-gpu"
+                    "--disable-gpu",
+                    "--disable-software-rasterizer"
                 ]
             )
             page = browser.new_page()
