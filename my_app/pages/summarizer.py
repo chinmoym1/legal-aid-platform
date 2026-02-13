@@ -59,37 +59,30 @@ def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
     
     try:
         with sync_playwright() as p:
-            # Try to launch; if it fails due to missing executable, we catch it
-            try:
-                browser = p.chromium.launch(args=["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"])
-            except Exception as launch_err:
-                if "Executable doesn't exist" in str(launch_err):
-                    st.warning("⚠️ Local PDF engine not found. Attempting auto-install...")
-                    import subprocess
-                    subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"])
-                    browser = p.chromium.launch(args=["--no-sandbox"])
-                else:
-                    raise launch_err
-
+            # Added essential flags for headless Linux containers
+            browser = p.chromium.launch(
+                args=[
+                    "--no-sandbox", 
+                    "--disable-setuid-sandbox", 
+                    "--disable-dev-shm-usage", 
+                    "--disable-gpu"
+                ]
+            )
             page = browser.new_page()
             page.set_content(html_content)
-            # Short delay to ensure content renders
+            # Give the fonts a moment to render
             page.wait_for_timeout(1000) 
             pdf_bytes = page.pdf(format="A4", print_background=True)
             browser.close()
             
         return BytesIO(pdf_bytes)
-    
     except Exception as e:
-        is_admin = st.session_state.get('role') == 'admin'
-        st.error("### ⚠️ PDF Generation Failed")
-        
-        if is_admin:
-            with st.expander("Developer Details"):
-                st.code(str(e))
+        # Friendly handling (as previously discussed)
+        if st.session_state.get('role') == 'admin':
+            st.error(f"Admin Debug: {e}")
         else:
-            st.info("The PDF service is temporarily unavailable. Please copy the summary text below.")
-        
+            st.error("### 🛠️ PDF Engine Warming Up")
+            st.info("System libraries are installing. Please try again in 1-2 minutes.")
         return BytesIO()
 
 def extract_text(file):

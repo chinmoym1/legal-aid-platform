@@ -46,10 +46,10 @@ if 'logged_in' not in st.session_state:
 @st.cache_resource
 def install_playwright_browser():
     try:
-        subprocess.run([sys.executable, "-m", "playwright", "install", "--with-deps", "chromium"], check=True)
+        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
     except Exception as e:
         st.error(f"Playwright Browser Installation failed: {e}")
-        
+
 install_playwright_browser()
 
 # --- 4. SIDEBAR AUTHENTICATION ---
