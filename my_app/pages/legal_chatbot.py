@@ -1,5 +1,4 @@
 # pages/legal_chatbot.py
-# --- This file should be inside your 'pages/' folder ---
 
 import streamlit as st
 from streamlit_mic_recorder import speech_to_text
@@ -58,7 +57,27 @@ def load_css():
                 background-color: var(--color-bg-light);
                 color: var(--color-text-dark);
             }
-            [data-testid="stHeader"] { display: none; }
+            /* HIDE THE NATIVE FILE NAVIGATION (The list of filenames at the top) */
+            [data-testid="stSidebarNav"] {
+                display: none !important;
+            }
+
+            [data-testid="stHeader"] { 
+                background-color: transparent;
+            }
+
+            /* Style the Sidebar Container to look full and professional */
+            section[data-testid="stSidebar"] {
+                background-color: #f0f2f6; 
+                border-right: 1px solid var(--color-border);
+                min-height: 100vh !important;
+                height: 100vh !important;
+            }
+
+            /* Add gap below the 'Logged in as' success box in sidebar */
+            [data-testid="stSidebar"] [data-testid="stAlert"] {
+                margin-bottom: 2rem !important; /* Adds the gap before Logout button */
+            }
             
             /* Add padding to bottom to avoid st.chat_input overlap */
             [data-testid="stAppViewContainer"] {
@@ -140,7 +159,7 @@ def load_css():
             }
             
             /* Style the st.button for example prompts */
-            [data-testid="stButton"] > button {
+            section[data-testid="stMain"] [data-testid="stButton"] > button {
                 background-color: var(--color-white);
                 color: var(--color-primary-dark);
                 border: 1px solid var(--color-border);
@@ -149,29 +168,29 @@ def load_css():
                 font-weight: 600;
                 transition: all 0.3s ease;
             }
-            [data-testid="stButton"] > button:hover {
+            section[data-testid="stMain"] [data-testid="stButton"] > button:hover {
                 background-color: var(--color-white);
                 color: var(--color-accent-gold);
                 border-color: var(--color-accent-gold);
                 box-shadow: 0 4px 12px rgba(0,0,0,0.08);
                 transform: translateY(-2px);
             }
-            [data-testid="stButton"] > button:active {
+            section[data-testid="stMain"] [data-testid="stButton"] > button:active {
                 background-color: var(--color-bg-dark) !important;
             }
 
-            /* --- 6. SIDEBAR BUTTON --- */
-            [data-testid="stSidebar"] [data-testid="stButton"] > button {
-                background: #FFFBEB; /* Light yellow from disclaimer */
-                color: #B45309; /* Amber text */
-                border: 1px solid #F59E0B;
-                font-weight: 700;
-            }
-            [data-testid="stSidebar"] [data-testid="stButton"] > button:hover {
-                background: #FEF3C7;
-                border-color: #B45309;
-                color: #92400E;
-            }
+            # /* --- 6. SIDEBAR BUTTON --- */
+            # [data-testid="stSidebar"] [data-testid="stButton"] > button {
+            #     background: #FFFBEB; /* Light yellow from disclaimer */
+            #     color: #B45309; /* Amber text */
+            #     border: 1px solid #F59E0B;
+            #     font-weight: 700;
+            # }
+            # [data-testid="stSidebar"] [data-testid="stButton"] > button:hover {
+            #     background: #FEF3C7;
+            #     border-color: #B45309;
+            #     color: #92400E;
+            # }
 
             /* --- 7. CHAT INPUT BAR --- */
             /* This is the outer container */
@@ -211,6 +230,17 @@ def load_css():
             }
             button[title="⏹️ Stop recording"] {
                 background-color: var(--color-accent-gold) !important;
+            }
+
+            /* --- 9. VOICE BUTTON & INPUT ALIGNMENT --- */
+            /* This is the fix you found for the alignment */
+            .st-emotion-cache-8atqhb.e1mlolmg0 {
+                margin-top: -15px !important;
+            }
+
+            /* General fallback for the mic button just in case class names change */
+            button[title="Start recording"], button[title="Stop recording"] {
+                margin-top: -15px !important;
             }
 
         </style>

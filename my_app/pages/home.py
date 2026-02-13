@@ -37,6 +37,10 @@ def show_home():
                 background-color: var(--color-bg-light);
                 color: var(--color-text-dark);
             }
+            /* HIDE THE NATIVE FILE NAVIGATION (The list of filenames at the top) */
+            [data-testid="stSidebarNav"] {
+                display: none !important;
+            }
             
             /* Hide Streamlit's default header and footer */
             [data-testid="stHeader"] {

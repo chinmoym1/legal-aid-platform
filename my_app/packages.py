@@ -1,0 +1,3 @@
+playwright
+libgbm1
+libasound2
