@@ -1,6 +1,6 @@
 """
 Core RAG Pipeline (Updated)
-Author: Rahul Manchanda
+Author: Chinmoy
 """
 
 from langchain_huggingface import HuggingFaceEmbeddings

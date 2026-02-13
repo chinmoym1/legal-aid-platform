@@ -1,27 +1,10 @@
 streamlit
-faiss-cpu
-sentence-transformers
-transformers
-accelerate 
-pypdf
+streamlit-option-menu
+streamlit-mic-recorder
+google-generativeai
 python-dotenv
-openai
-langdetect
-dotenv
-bs4
-pdfplumber
-langchain
-langchain-community
-langchain-huggingface
-langchain_ollama
-langchain_openai
-Scikit-learn
-streamlit_mic_recorder 
-streamlit_option_menu
+pandas
+playwright
 fpdf
-PyPDF2
-python-docx
-docx2txt
-sqlalchemy
 
 

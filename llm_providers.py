@@ -1,7 +1,7 @@
 # llm_providers.py
 """
 LLM Providers - Ollama only backend
-Author: Rahul Manchanda
+Author: Chinmoy
 """
 
 import subprocess
