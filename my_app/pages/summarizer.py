@@ -24,7 +24,7 @@ try:
     genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
     MODEL = "gemini-2.5-flash"
 except Exception as e:
-    st.error(f"Failed to configure Gemini API. Please check your GOOGLE_API_KEY. Error: {e}")
+    st.error(f"Failed to configure Gemini API. Error: {e}")
     st.stop()
 
 # --- 2. BACKEND HELPER FUNCTIONS (No changes needed here) ---
@@ -57,14 +57,24 @@ def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
     """
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch()
+            browser = p.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox"])
             page = browser.new_page()
             page.set_content(html_content)
             pdf_bytes = page.pdf(format="A4")
             browser.close()
         return BytesIO(pdf_bytes)
     except Exception as e:
-        st.error(f"An error occurred during PDF generation with Playwright: {e}")
+        # Check user role for debug visibility
+        is_admin = st.session_state.get('role') == 'admin'
+
+        # Friendly User Message
+        st.error("### 🛠️ PDF Generation Unavailable")
+        st.info("The PDF engine is currently being configured on the server. Please download later or copy the text summary.")
+        
+        # Technical Admin Message (Hidden from regular users)
+        if is_admin:
+            with st.expander("Admin Debug Logs"):
+                st.code(str(e))
         return BytesIO()
 
 def extract_text(file):
@@ -75,6 +85,8 @@ def extract_text(file):
         return docx2txt.process(file)
     elif file.name.endswith(".txt"):
         return file.read().decode("utf-8")
+    except Exception as e:
+        st.error(f"Error reading file: {e}")
     return ""
 
 def summarize_with_gemini(text: str, language: str) -> str:
