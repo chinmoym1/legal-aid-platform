@@ -30,7 +30,6 @@ except Exception as e:
 # --- 2. BACKEND HELPER FUNCTIONS (No changes needed here) ---
 
 def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
-    # This function is already working well.
     font_map = {
         "English": "NotoSans-Regular.ttf", "Hindi": "NotoSansDevanagari-Regular.ttf",
         "Bengali": "NotoSansBengali-Regular.ttf", "Tamil": "NotoSansTamil-Regular.ttf",
@@ -41,12 +40,14 @@ def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
     }
     font_file = font_map.get(language, "NotoSans-Regular.ttf")
     font_path = os.path.abspath(os.path.join("fonts", font_file))
+    
     try:
         with open(font_path, "rb") as f:
             font_data = base64.b64encode(f.read()).decode("utf-8")
     except FileNotFoundError:
-        st.error(f"Unable to generate PDF for '{language}' as its font file is missing.")
+        st.error(f"Unable to generate PDF for '{language}' as its font file is missing at {font_path}")
         return BytesIO()
+
     summary_html = summary_text.replace('\n', '<br>')
     html_content = f"""
     <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Legal Summary</title><style>
@@ -55,26 +56,40 @@ def create_pdf_with_playwright(summary_text: str, language: str) -> BytesIO:
     h1 {{ text-align: center; font-size: 16pt; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }}
     </style></head><body><h1>Legal Summary ({language})</h1><p>{summary_html}</p></body></html>
     """
+    
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox"])
+            # Try to launch; if it fails due to missing executable, we catch it
+            try:
+                browser = p.chromium.launch(args=["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"])
+            except Exception as launch_err:
+                if "Executable doesn't exist" in str(launch_err):
+                    st.warning("⚠️ Local PDF engine not found. Attempting auto-install...")
+                    import subprocess
+                    subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"])
+                    browser = p.chromium.launch(args=["--no-sandbox"])
+                else:
+                    raise launch_err
+
             page = browser.new_page()
             page.set_content(html_content)
-            pdf_bytes = page.pdf(format="A4")
+            # Short delay to ensure content renders
+            page.wait_for_timeout(1000) 
+            pdf_bytes = page.pdf(format="A4", print_background=True)
             browser.close()
+            
         return BytesIO(pdf_bytes)
+    
     except Exception as e:
-        # Check user role for debug visibility
         is_admin = st.session_state.get('role') == 'admin'
-
-        # Friendly User Message
-        st.error("### 🛠️ PDF Generation Unavailable")
-        st.info("The PDF engine is currently being configured on the server. Please download later or copy the text summary.")
+        st.error("### ⚠️ PDF Generation Failed")
         
-        # Technical Admin Message (Hidden from regular users)
         if is_admin:
-            with st.expander("Admin Debug Logs"):
+            with st.expander("Developer Details"):
                 st.code(str(e))
+        else:
+            st.info("The PDF service is temporarily unavailable. Please copy the summary text below.")
+        
         return BytesIO()
 
 def extract_text(file):
